@@ -4,7 +4,7 @@ FROM \
 LABEL \
     name="bifrost-ariba_mlst" \
     description="Docker environment for ariba_mlst in bifrost" \
-    version="2.0" \
+    version="2.0.5" \
     DBversion="21/08/19" \
     maintainer="kimn@ssi.dk;"
 
