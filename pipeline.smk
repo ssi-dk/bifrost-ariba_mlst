@@ -2,6 +2,7 @@
 import os
 from bifrostlib import datahandling
 
+
 bifrost_sampleComponentObj = datahandling.SampleComponentObj()
 sample_name, component_name, dockerfile, options, bifrost_resources = bifrost_sampleComponentObj.load(config["sample_id"], config["component_id"])
 bifrost_sampleComponentObj.started()
