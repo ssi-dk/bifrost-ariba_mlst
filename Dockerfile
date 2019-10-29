@@ -158,5 +158,6 @@ RUN \
     ariba pubmlstget "Yersinia ruckeri" Yersinia_ruckeri; \
     ariba pubmlstget "Yersinia spp." Yersinia_spp_;
 
+
 ENTRYPOINT \
     ["/bifrost_resources/docker_umask_002.sh"]
