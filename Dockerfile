@@ -1,19 +1,26 @@
-FROM \
-    ssidk/bifrost-base:2.0.5
+FROM ssidk/bifrost-base:2.0.5
+
+ARG version="2.0.5"
+ARG last_updated="06/11/2019"
+ARG name="ariba_mlst"
+ARG full_name="bifrost-${name}"
 
 LABEL \
-    name="bifrost-ariba_mlst" \
-    description="Docker environment for ariba_mlst in bifrost" \
-    version="2.0.5" \
-    DBversion="21/08/19" \
+    name=${name} \
+    description="Docker environment for ${full_name}" \
+    version=${version} \
+    resource_version=${last_updated} \
     maintainer="kimn@ssi.dk;"
 
+#- Tools to install:start---------------------------------------------------------------------------
 RUN \
-    conda install -yq -c conda-forge -c bioconda -c defaults ariba==2.13.3; \
-    # In base image
-    cd /bifrost_resources; \
-    mkdir mlst; \
-    cd /bifrost_resources/mlst; \
+    conda install -yq -c conda-forge -c bioconda -c defaults ariba==2.13.3; 
+#- Tools to install:end ----------------------------------------------------------------------------
+
+#- Additional resources (files/DBs): end -----------------------------------------------------------
+RUN cd /bifrost_resources && \
+    mkdir mlst && \
+    cd /bifrost_resources/mlst;\
     # NOTE: running this will generate a DB which is time dependant. Please use docker image for this DB
     ariba pubmlstget "Achromobacter spp." Achromobacter_spp_; \
     ariba pubmlstget "Acinetobacter baumannii#1" Acinetobacter_baumannii_1; \
@@ -156,9 +163,15 @@ RUN \
     ariba pubmlstget "Yersinia pseudotuberculosis" Yersinia_pseudotuberculosis; \
     ariba pubmlstget "Yersinia ruckeri" Yersinia_ruckeri; \
     ariba pubmlstget "Yersinia spp." Yersinia_spp_;
+#- Additional resources (files/DBs): end -----------------------------------------------------------
 
+#- Source code:start -------------------------------------------------------------------------------
+RUN cd /bifrost && \
+    git clone --branch ${version} https://github.com/ssi-dk/${full_name}.git ${name};
+#- Source code:end ---------------------------------------------------------------------------------
 
-ENTRYPOINT \
-    [ "/bifrost/whats_my_species/launcher.py"]
-CMD \
-    [ "/bifrost/whats_my_species/launcher.py", "--help"]
+#- Set up entry point:start ------------------------------------------------------------------------
+ENV PATH /bifrost/${name}/:$PATH
+ENTRYPOINT ["launcher.py"]
+CMD ["launcher.py", "--help"]
+#- Set up entry point:end --------------------------------------------------------------------------
