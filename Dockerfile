@@ -14,7 +14,8 @@ LABEL \
 
 #- Tools to install:start---------------------------------------------------------------------------
 RUN \
-    conda install -yq -c conda-forge -c bioconda -c defaults ariba==2.13.3; 
+    apt-get update && apt-get install -y -qq --fix-missing \
+        ariba=2.13.3+ds-1;
 #- Tools to install:end ----------------------------------------------------------------------------
 
 #- Additional resources (files/DBs): end -----------------------------------------------------------
