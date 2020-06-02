@@ -174,8 +174,9 @@ resources:
 requirements:
   sample:
     properties:
-      datafiles:
-        paired_reads:
+      paired_reads:
+        summary:
+          data:
       species_detection:
         summary:
           species:
