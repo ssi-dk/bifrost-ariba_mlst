@@ -60,14 +60,9 @@ RUN \
 #- Additional resources (files/DBs): end -----------------------------------------------------------
 
 #- Source code:start -------------------------------------------------------------------------------
-WORKDIR ${NAME}
-RUN \
-    mkdir resources; \
-    cd resources; \
-    mkdir mlst; 
 WORKDIR /${NAME}/resources/mlst
 RUN \
-    NOTE: running this will generate a DB which is time dependant. Please use docker image for this DB
+    # NOTE: running this will generate a DB which is time dependant. Please use docker image for this DB
     ariba pubmlstget "Achromobacter spp." Achromobacter_spp_; \
     ariba pubmlstget "Acinetobacter baumannii#1" Acinetobacter_baumannii_1; \
     ariba pubmlstget "Acinetobacter baumannii#2" Acinetobacter_baumannii_2; \
