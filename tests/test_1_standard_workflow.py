@@ -87,4 +87,4 @@ def test_pipeline(mydb):
     os.makedirs("/bifrost_test_data/output/test1")
     args = baml.parser(["-id", sample_id,"-out", "/bifrost_test_data/output/test1"])
     baml.run_program(args)
-    assert os.path.isfile("/bifrost_test_data/output/test1/cge_resfinder/datadump_complete")
+    assert os.path.isfile("/bifrost_test_data/output/test1/ariba_mlst/datadump_complete")
