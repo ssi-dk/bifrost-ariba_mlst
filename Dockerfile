@@ -51,8 +51,7 @@ LABEL \
 #- Tools to install:start---------------------------------------------------------------------------
 RUN \
     conda install -yq -c conda-forge -c bioconda -c default snakemake-minimal==5.7.1; \
-    apt-get update && apt-get install -y -qq --fix-missing \
-        ariba=2.13.3+ds-1; \
+    conda install -yq -c conda-forge -c bioconda -c default ariba==2.14.6; \
     pip list;
 #- Tools to install:end ----------------------------------------------------------------------------
 
@@ -66,9 +65,9 @@ RUN \
     mkdir resources; \
     cd resources; \
     mkdir mlst; 
-WORKDIR ${NAME}\resources\mlst
+WORKDIR /${NAME}/resources/mlst
 RUN \
-    # NOTE: running this will generate a DB which is time dependant. Please use docker image for this DB
+    NOTE: running this will generate a DB which is time dependant. Please use docker image for this DB
     ariba pubmlstget "Achromobacter spp." Achromobacter_spp_; \
     ariba pubmlstget "Acinetobacter baumannii#1" Acinetobacter_baumannii_1; \
     ariba pubmlstget "Acinetobacter baumannii#2" Acinetobacter_baumannii_2; \
