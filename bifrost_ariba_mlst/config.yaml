@@ -1,15 +1,15 @@
 #-Basic info----------------------------------------------------------------------------------------
-name: ariba_mlst
-version: 2.0.7
+display_name: ariba_mlst
+name: &name ariba_mlst__unspecified__unspecified
+version:
+  schema: 2.0
+  code: unspecified
+  resource: unspecified
 #---------------------------------------------------------------------------------------------------
 
 #-Details-------------------------------------------------------------------------------------------
 details:
-  category: mlst
-  schema_version: 2.0
   target: sample
-  type: pipeline
-  recommendation: recommended
   description: >
     This preforms read based mapping against the mlst DB's. The mlst DB's are mapped against the 
     species table in mongoDB via the mlst_species_mapping variable. Multiple mlst's can be run against 
@@ -17,8 +17,14 @@ details:
     cge_db using ariba. 
 #---------------------------------------------------------------------------------------------------
 
-#-Docker location-----------------------------------------------------------------------------------
-dockerfile: &dockerfile "docker://ssidk/bifrost-ariba_mlst:2.0.7"
+#-Category info-------------------------------------------------------------------------------------
+category: [mlst]
+#---------------------------------------------------------------------------------------------------
+
+#-Install-------------------------------------------------------------------------------------------
+install:
+  path: # Set by install program
+  dockerfile: docker://ssidk/bifrost_ariba_mlst:unspecified__unspecified
 #---------------------------------------------------------------------------------------------------
 
 #-Options-------------------------------------------------------------------------------------------
@@ -148,6 +154,7 @@ options:
     "Streptococcus uberis": [Streptococcus_uberis]
     "Streptococcus zooepidemicus": [Streptococcus_zooepidemicus]
     "Taylorella": [Taylorella_spp_]
+    "Taylorella equigenitalis": [taylorella]
     "Tenacibaculum": [Tenacibaculum_spp_]
     "Treponema pallidum": [Treponema_pallidum]
     "Trichomonas vaginalis": [Trichomonas_vaginalis]
@@ -167,7 +174,7 @@ options:
 
 #-Required resource files---------------------------------------------------------------------------
 resources:
-  database_path: "/bifrost_resources/mlst"
+  database_path: "/bifrost_ariba_mlst/resources/mlst"
 #---------------------------------------------------------------------------------------------------
 
 #-Requirements to run component---------------------------------------------------------------------
@@ -334,7 +341,7 @@ db_values_changes:
     report:
       mlst:
         title: "MLST"
-        info: *dockerfile
+        info: *name
         columns: 
           - {id: "db", name: "db"}
           - {id: "strain", name: "strain"}
