@@ -51,7 +51,7 @@ LABEL \
 #- Tools to install:start---------------------------------------------------------------------------
 RUN \
     conda install -yq -c conda-forge -c bioconda -c default snakemake-minimal==5.7.1; \
-    conda install -yq -c conda-forge -c bioconda -c default ariba==2.14.6; \
+    conda install -yq -c conda-forge -c bioconda -c default ariba==2.14.5; \
     pip list;
 #- Tools to install:end ----------------------------------------------------------------------------
 
