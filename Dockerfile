@@ -3,7 +3,7 @@
 ARG BUILD_ENV="prod"
 ARG NAME="bifrost_ariba_mlst"
 ARG CODE_VERSION="unspecified"
-ARG RESOURCE_VERSION="200831"
+ARG RESOURCE_VERSION="200903"
 ARG MAINTAINER="kimn@ssi.dk"
 
 # For dev build include testing modules via pytest done on github and in development.
