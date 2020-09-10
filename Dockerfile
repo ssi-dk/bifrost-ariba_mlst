@@ -3,6 +3,7 @@
 ARG BUILD_ENV="prod"
 ARG NAME="bifrost_ariba_mlst"
 ARG CODE_VERSION="unspecified"
+#Resource version set by github action for current push date
 ARG RESOURCE_VERSION="unspecified"
 ARG MAINTAINER="kimn@ssi.dk"
 
