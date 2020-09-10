@@ -2,15 +2,16 @@ name: Build and push Docker images to Dockerhub
 on:
   push:
   release:
-    types: [created]
 
 jobs:
     build-n-publish:
       name: Publish Docker 🐳 image 📦 to Dockerhub
       runs-on: ubuntu-latest
-
       steps:
       - uses: actions/checkout@v2
+      - name: Get current date
+        id: date
+        run: echo "::set-output name=date::$(date +'%y%m%d')"
       - name: Build and push Docker images (to dev)
         if: github.ref == 'refs/heads/dev'
         uses: docker/build-push-action@v1.1.0
@@ -35,5 +36,6 @@ jobs:
           username: ${{ secrets.DOCKER_USERNAME }} # optional
           password: ${{ secrets.DOCKER_PASSWORD }} # optional
           repository: ssidk/${{ github.event.repository.name }}
-          tag_with_ref: true # optional
-          push: ${{ startsWith(github.ref, 'refs/tags/') }} # composite of code_version__resource_version
+          tags: ${{ github.event.release.tag_name }}__NA # composite of code_version__resource_version
+          push: ${{ startsWith(github.ref, 'refs/tags/') }} 
+          build_args: CODE_VERSION=${{ github.event.release.tag_name }},RESOURCE_VERSION=${{ steps.date.outputs.date }}
