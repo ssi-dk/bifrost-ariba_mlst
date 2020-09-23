@@ -196,8 +196,8 @@ RUN \
     ariba pubmlstget "Wolbachia" Wolbachia; \
     ariba pubmlstget "Xylella fastidiosa" Xylella_fastidiosa; \
     ariba pubmlstget "Yersinia pseudotuberculosis" Yersinia_pseudotuberculosis; \
-    ariba pubmlstget "Yersinia ruckeri" Yersinia_ruckeri; \
-#- Source code:end ---------------------------------------------------------------------------------
+    ariba pubmlstget "Yersinia ruckeri" Yersinia_ruckeri;
+    #- Source code:end ---------------------------------------------------------------------------------
 
 #- Set up entry point:start ------------------------------------------------------------------------
 ENTRYPOINT ["python3", "-m", "bifrost_ariba_mlst"]
