@@ -166,8 +166,6 @@ options:
     "Vibrio vulnificus": [Vibrio_vulnificus]
     "Wolbachia": [Wolbachia]
     "Xylella fastidiosa": [Xylella_fastidiosa]
-    "Yersinia aleksiciae": [Yersinia_spp_]
-    "Yersinia enterocolitica": [Yersinia_spp_]
     "Yersinia pseudotuberculosis": [Yersinia_pseudotuberculosis]
     "Yersinia ruckeri": [Yersinia_ruckeri]
 #---------------------------------------------------------------------------------------------------

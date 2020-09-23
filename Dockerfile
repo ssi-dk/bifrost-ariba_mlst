@@ -197,7 +197,6 @@ RUN \
     ariba pubmlstget "Xylella fastidiosa" Xylella_fastidiosa; \
     ariba pubmlstget "Yersinia pseudotuberculosis" Yersinia_pseudotuberculosis; \
     ariba pubmlstget "Yersinia ruckeri" Yersinia_ruckeri; \
-    ariba pubmlstget "Yersinia spp." Yersinia_spp_;
 #- Source code:end ---------------------------------------------------------------------------------
 
 #- Set up entry point:start ------------------------------------------------------------------------
