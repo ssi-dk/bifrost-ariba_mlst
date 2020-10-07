@@ -35,13 +35,8 @@ def test_clear_db(mydb):
 
 def test_install_component(mydb):
     test_clear_db(mydb)
-
-    args: argparse.Namespace = brl.parser(["--install"])
-    brl.run_program(args)
-
-    args: argparse.Namespace = baml.parser(["--install"])
-    baml.run_program(args)
-    
+    brl.parser(["--install"])
+    baml.parser(["--install"])
 
 def test_setup_of_data(mydb):
     test_install_component(mydb)
@@ -66,7 +61,6 @@ def test_setup_of_data(mydb):
         "-type", "test",
         "-out", "/bifrost_test_data/output/setup"
     ])
-    brl.run_program(args)
     assert os.path.isfile("run.yaml")
     with open("run.yaml", "r") as file_handle:
         run_doc = yaml.safe_load(file_handle)
@@ -86,5 +80,4 @@ def test_pipeline(mydb):
         shutil.rmtree("/bifrost_test_data/output/test1")
     os.makedirs("/bifrost_test_data/output/test1")
     args = baml.parser(["-id", sample_id,"-out", "/bifrost_test_data/output/test1"])
-    baml.run_program(args)
     assert os.path.isfile("/bifrost_test_data/output/test1/ariba_mlst/datadump_complete")

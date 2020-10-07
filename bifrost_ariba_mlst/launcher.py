@@ -12,6 +12,18 @@ from bifrostlib import datahandling
 
 COMPONENT: dict = datahandling.load_yaml(os.path.join(os.path.dirname(__file__), 'config.yaml'))
 
+class types():
+    def file(path):
+        if os.path.isfile(path):
+            return os.path.abspath(path)
+        else:
+            raise argparse.ArgumentTypeError(f"{path} #Not a valid path")
+    def directory(path):
+        if os.path.isdir(path):
+            return os.path.abspath(path)
+        else:
+            raise argparse.ArgumentTypeError(f"{path} #Not a valid path")
+
 def parser(args):
     """
     Arg parsing via argparse
@@ -19,35 +31,55 @@ def parser(args):
     description: str = (
         f"-Description------------------------------------\n"
         f"{COMPONENT['details']['description']}"
-        f"------------------------------------------------\n\n"
-        f"*Run command************************************\n"
-        f"docker run \ \n"
-        f" -e BIFROST_DB_KEY=mongodb://<user>:<password>@<server>:<port>/<db_name> \ \n"
-        f" {COMPONENT['install']['dockerfile']} \ \n"
-        f"************************************************\n"
+        f"------------------------------------------------\n"
+        f"\n"
+        f"-Environmental Variables/Defaults---------------\n"
+        f"BIFROST_CONFIG_DIR: {os.environ.get('BIFROST_CONFIG_DIR','.')}\n"
+        f"BIFROST_RUN_DIR: {os.environ.get('BIFROST_RUN_DIR','.')}\n"
+        f"BIFROST_DB_KEY: {os.environ.get('BIFROST_DB_KEY')}\n"
+        f"------------------------------------------------\n"
+        f"\n"
     )
+    install_parser = argparse.ArgumentParser(add_help=False)
+    install_parser.add_argument(
+        '--install',
+        action='store_true',
+        )
     parser: argparse.ArgumentParser = argparse.ArgumentParser(description=description, formatter_class=argparse.RawDescriptionHelpFormatter)
-    parser.add_argument('--install',
-                        action='store_true',
-                        help='Install/Force reinstall component')
-    parser.add_argument('-info', '--info',
-                        action='store_true',
-                        help='Provides basic information on component')
-    parser.add_argument('-out', '--outdir',
-                        default=".",
-                        help='Output directory')
-    parser.add_argument('-id', '--sample_id',
-                        action='store',
-                        type=str,
-                        help='Sample ID of sample in bifrost, sample has already been added to the bifrost DB')
+    parser.add_argument(
+        '--info',
+        action='store_true',
+        help='Provides basic information on component'
+        )
+    parser.add_argument(
+        '--debug',
+        action='store_true',
+        help='Show arg values'
+        )
+    parser.add_argument(
+        '-out', '--outdir',
+        default=os.environ.get('BIFROST_RUN_DIR',os.getcwd()),
+        help='Output directory'
+        )
+    parser.add_argument(
+        '-id', '--sample_id',
+        action='store',
+        type=str,
+        help='Sample ID of sample in bifrost, sample has already been added to the bifrost DB'
+        )
 
     try:
-        options: argparse.Namespace = parser.parse_args(args)
+        install_options, extras = install_parser.parse_known_args(args)
+        if install_options.install:
+            install_component()
+            return None
+        else:
+            run_options = parser.parse_args(extras)
+            if run_options.debug is True:
+                print(run_options)
+            run_program(run_options)
     except:
-        parser.print_help()
         sys.exit(0)
-
-    return options
 
 def run_program(args: argparse.Namespace):
     if not datahandling.check_db_connection_exists():
@@ -61,10 +93,8 @@ def run_program(args: argparse.Namespace):
 
     if args.info:
         show_info()
-    elif args.install:
-        install_component()
-    elif args.sample_id is not None:
-        run_sample(args)
+    else:
+        run_pipeline(args)
 
 
 def show_info():
@@ -91,14 +121,16 @@ def install_component():
         #HACK: Installs based on your current directory currently. Should be changed to the directory your docker/singularity file is
         #HACK: Removed install check so you can reinstall the component. Should do this in a nicer way
         COMPONENT['install']['path'] = os.path.os.getcwd()
+        print(f"Installing with path:{COMPONENT['install']['path']}")
         datahandling.post_component(COMPONENT)
         component: list[dict] = datahandling.get_components(component_names=[COMPONENT['name']])
         if len(component) != 1:
             print(f"Error with installation of {COMPONENT['name']} {len(component)}\n")
             exit()
+        print(f"Done installing")
 
 
-def run_sample(args: object):
+def run_pipeline(args: object):
     """
     Runs sample ID through snakemake pipeline
     """
@@ -109,7 +141,7 @@ def run_sample(args: object):
     sample: list[dict] = datahandling.get_samples(sample_ids=[args.sample_id])
     component: list[dict] = datahandling.get_components(component_names=[COMPONENT['name']])
     if len(component) == 0:
-        print(f"component not found in DB, would you like to install it (Y/N)?:")
+        print(f"component not found in DB, installing it:")
         install_component()
 
     if len(sample) == 0:
@@ -135,7 +167,6 @@ def run_sample(args: object):
 
 def run():
     args: argparse.Namespace = parser(sys.argv[1:])
-    run_program(args)
 
 if __name__ == '__main__':
     run()
